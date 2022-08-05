@@ -28,3 +28,4 @@ class BaseModel:
     def save(self):
         "Updates the updated_at with current datetime"
         self.updated_at = datetime.now()
+
