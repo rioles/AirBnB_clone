@@ -8,10 +8,18 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         "Initialize the instance attributes"
-        tform = "%Y-%m-%dT%H:%M:%S.%f"
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.today()
-        self.updated_at = datetime.now()
+        if not kwargs:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
+        else:
+            for key, value in kwargs.items():
+                if key != "__class__":
+                    self.__dict__[key] = value
+                if key in ("created_at", "updated_at"):
+                    self.__dict__[key] =
+                    datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+                    """setattr(self, key, value)"""
 
     def to_dict(self):
         "returns a dic of all keys and values of __dict__"
@@ -24,9 +32,9 @@ class BaseModel:
     def __str__(self):
         "prints the className, self.id and self.__dict__"
         class_name = type(self).__name__
-        return '[{}] ({}) {}'.format(class_name, self.id, self.__dict__)
+        """return '[{}] ({}) {}'.format(class_name, self.id, self.__dict__)"""
+        return f"[{class_name}] ({self.id}) {self.__dict__}"
 
     def save(self):
         "Updates the updated_at with current datetime"
         self.updated_at = datetime.now()
-
